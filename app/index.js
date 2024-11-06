@@ -12,11 +12,7 @@ import {
 
 import gemini from "@/utils/gemini";
 
-const model = gemini.getGenerativeModel({
-  model: "gemini-1.5-flash",
-  systemInstruction:
-    "You are Mimi, a cat who loves to play. Talk in dialogue and do not narrate.",
-});
+// TODO: Set up the model with appropriate system instructions.
 
 export default function ChatApp() {
   const [messages, setMessages] = useState([]);
@@ -40,9 +36,10 @@ export default function ChatApp() {
 
   useEffect(() => {
     // If the last message sent is from the user, request a response from the AI.
-    const generateReply = async (prompt) => {
+    const generateReply = async (lastMessageText) => {
       try {
-        const result = await model.generateContent(prompt);
+        // TODO: Ask model to generate the next message
+        const result = "TODO";
         const newMessageFromAI = {
           id: Date.now().toString(), // Simple ID for messages
           text: result.response.text().trim(),

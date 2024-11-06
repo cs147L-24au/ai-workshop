@@ -13,9 +13,7 @@ import { CameraView, useCameraPermissions } from "expo-camera";
 
 import gemini from "@/utils/gemini";
 
-const model = gemini.getGenerativeModel({
-  model: "gemini-1.5-flash",
-});
+// TODO: Set up the model.
 
 export default function DescribeApp() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -60,15 +58,8 @@ export default function DescribeApp() {
         base64: true, // also include image data in base64 format
       });
 
-      const result = await model.generateContent([
-        "Tell me about this image.",
-        {
-          inlineData: {
-            data: photoData.base64,
-            mimeType: "image/jpeg",
-          },
-        },
-      ]);
+      // TODO: Ask model describe the photo and upload the photo data.
+      const result = "TODO";
       Alert.alert("What is this?", result.response.text());
     } catch (err) {
       console.error(err);
