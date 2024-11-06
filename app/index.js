@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 
-import gemini from "@/utils/gemini";
+import { API_KEY } from "@/utils/gemini";
 
 // TODO: Set up the model with appropriate system instructions.
 

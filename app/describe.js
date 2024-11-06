@@ -11,7 +11,7 @@ import {
 
 import { CameraView, useCameraPermissions } from "expo-camera";
 
-import gemini from "@/utils/gemini";
+import { API_KEY } from "@/utils/gemini";
 
 // TODO: Set up the model.
 

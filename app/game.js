@@ -11,7 +11,7 @@ import {
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
-import gemini from "@/utils/gemini";
+import { API_KEY } from "@/utils/gemini";
 
 // TODO: Set up the model with appropriate system instructions.
 
