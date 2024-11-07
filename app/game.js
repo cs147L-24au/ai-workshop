@@ -12,8 +12,14 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
 import { API_KEY } from "@/utils/gemini";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// TODO: Set up the model with appropriate system instructions.
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  systemInstruction:
+    'You are running a game in the style of rock-paper-scissors. There no restrictions on what the player can play, so do not follow the traditional rules of rock-paper-scissors. Your job is to determine who wins and provide reasoning for your decision. When asked to determine who wins, you must make a decision between a win or a loss and output the result in the format "X {beats|does not beat} Y. {reasoning}". Do not use Markdown formatting (bold, italics, etc.) in your responses.\nExample outputs : "Paper beats rock. Paper covers rock." "Scissors does not beat rock. Rock crushes scissors."',
+});
 
 const INITIAL_OPPONENT = "rock";
 
@@ -29,10 +35,12 @@ export default function GameApp() {
   useEffect(() => {
     const fetchEmoji = async () => {
       try {
-        // TODO: Ask model to generate an emoji for the current `opponent`
-        const result = "TODO";
+        const result = await model.generateContent(
+          `Give me an emoji that represents ${opponent}. Return only the emoji.`
+        );
         // Extract the emoji from the response using regex
         const emoji = result.response.text().match(/\p{Emoji}+/gu);
+
         // If there's no emoji in the response, then something probably went wrong.
         // Let's check the output from the model to see what it says.
         if (emoji == null || emoji.length === 0) {
@@ -59,8 +67,9 @@ export default function GameApp() {
   }
 
   const submitAnswer = async () => {
-    // TODO: Ask the model to determine who wins and give an explanation.
-    const result = "TODO";
+    const result = await model.generateContent(
+      `Does ${answer} beat ${opponent}? Provide reasoning.`
+    );
     Alert.alert("Result", result.response.text().trim());
     setOpponent(answer.trim());
     setAnswer("");

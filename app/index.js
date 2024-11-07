@@ -11,8 +11,15 @@ import {
 } from "react-native";
 
 import { API_KEY } from "@/utils/gemini";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// TODO: Set up the model with appropriate system instructions.
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+  systemInstruction:
+    "You are Mimi, a cat who loves to play. Talk in dialogue and do not narrate.",
+});
+const chat = model.startChat();
 
 export default function ChatApp() {
   const [messages, setMessages] = useState([]);
@@ -36,10 +43,9 @@ export default function ChatApp() {
 
   useEffect(() => {
     // If the last message sent is from the user, request a response from the AI.
-    const generateReply = async (lastMessageText) => {
+    const generateReply = async (prompt) => {
       try {
-        // TODO: Ask model to generate the next message
-        const result = "TODO";
+        const result = await chat.sendMessage(prompt);
         const newMessageFromAI = {
           id: Date.now().toString(), // Simple ID for messages
           text: result.response.text().trim(),
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   receivedMessage: {
-    backgroundColor: "gray", // manually adjusted
+    backgroundColor: "gray",
     alignSelf: "flex-start",
   },
   messageText: {

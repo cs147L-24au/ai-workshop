@@ -12,8 +12,12 @@ import {
 import { CameraView, useCameraPermissions } from "expo-camera";
 
 import { API_KEY } from "@/utils/gemini";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// TODO: Set up the model.
+const genAI = new GoogleGenerativeAI(API_KEY);
+const model = genAI.getGenerativeModel({
+  model: "gemini-1.5-flash",
+});
 
 export default function DescribeApp() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -58,8 +62,15 @@ export default function DescribeApp() {
         base64: true, // also include image data in base64 format
       });
 
-      // TODO: Ask model describe the photo and upload the photo data.
-      const result = "TODO";
+      const result = await model.generateContent([
+        "Tell me about this image.",
+        {
+          inlineData: {
+            data: photoData.base64,
+            mimeType: "image/jpeg",
+          },
+        },
+      ]);
       Alert.alert("What is this?", result.response.text());
     } catch (err) {
       console.error(err);
